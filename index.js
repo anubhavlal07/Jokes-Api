@@ -1,30 +1,18 @@
 const jokeContainer = document.getElementById("joke");
 const genere = document.getElementById("genere");
 const btn = document.getElementById("btn");
-
-// let url = "https://jokeapi-v2.p.rapidapi.com/joke/Any?type=single&format=json&idRange=0-319&blacklistFlags=religious%2Cracist%2Cpolitical"; Single Jokes
-//let url = "https://jokeapi-v2.p.rapidapi.com/joke/Any?format=json&idRange=0-319&blacklistFlags=religious%2Cracist%2Cpolitical"; All type of Jokes
-let url = "https://jokeapi-v2.p.rapidapi.com/joke/Any?format=json&idRange=0-319&blacklistFlags=religious%2Cracist%2Cpolitical%2cnsfw";
-let host = "jokeapi-v2.p.rapidapi.com";
-let key = "73fca24707msh00e5c54fbc7dd20p15680fjsn9e57788ef38d";
+let url = "https://backend-omega-seven.vercel.app/api/getjoke";
 let timeleft;
 
 let getJoke = () => {
   fetch(url, {
     method: "GET",
-    headers: {
-      "x-rapidapi-host": host,
-      "x-rapidapi-key": key,
-    },
+    redirect: "follow",
   })
     .then((response) => response.json())
     .then((response) => {
-      if (response.type == "single") {
-        // If type == "single", the joke only has the "joke" property
-        jokeContainer.innerHTML = `${response.joke} <br><span id="genere" class="genere">Genere : ${response.category}</span>`;
-      } else {
-        jokeContainer.innerHTML = `${response.setup}<br>${response.delivery} <br><span id="genere" class="genere">Genere : ${response.category}</span>`;
-      }
+      console.log(response[0]);
+      jokeContainer.innerHTML = `${response[0].question}<br>${response[0].punchline}`;
     })
     .catch((err) => {
       console.error(err);
@@ -39,7 +27,7 @@ var downloadTimer = setInterval(function () {
   document.getElementById("next").innerHTML = `Next joke in ${timeleft}s.`;
   timeleft -= 1;
   if (timeleft <= 0) {
-    btn.click();
+    getJoke();
     console.clear();
     timeleft = 30;
   }
